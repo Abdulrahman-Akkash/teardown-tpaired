@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tpaired-power"
+version = "0.1.0"
+description = "Clean-room power analysis for the paired-samples t test (a priori N, post hoc power)."
+requires-python = ">=3.11"
+dependencies = ["scipy>=1.11"]
+
+[project.optional-dependencies]
+mcp = ["mcp>=2"]
+test = ["pytest>=8", "statsmodels>=0.14", "mpmath>=1.3"]
+
+[project.scripts]
+gpower-clone = "tpaired.cli:main"
+tpaired-mcp = "tpaired.mcp_server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]

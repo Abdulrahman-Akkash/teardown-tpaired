@@ -1,0 +1,27 @@
+# G*Power binary'si repoya KONMAZ (etik kural 2)
+GPower.exe
+*.exe
+*.msi
+*.dll
+GPower*/
+gpower/
+
+# Ghidra projeleri ve decompile çıktısı repoya KONMAZ (temel kural 4)
+*.gpr
+*.rep/
+ghidra_projects/
+decompile/
+*.decomp.c
+re-workspace/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Yerel / gizli
+.env
+*.log.tmp

@@ -1,0 +1,73 @@
+id,mode,tails,dz,alpha,power_in,n_in,ncp,critical,df,n_out,actual_power,error,screenshot,note
+GP-001,a-priori,2,0.5,0.05,0.95,,3.6742346,2.0057460,53,54,0.9502120,,oracle/screenshots/GP-001.png,tipik
+GP-002,a-priori,1,0.5,0.05,0.95,,3.3541020,1.6802300,44,45,0.9512400,,oracle/screenshots/GP-002.png,tipik tek kuyruk
+GP-003,a-priori,2,0.5,0.05,0.80,,2.9154759,2.0345153,33,34,0.8077775,,oracle/screenshots/GP-003.png,tipik
+GP-004,a-priori,2,0.2,0.05,0.80,,2.8213472,1.9720175,198,199,0.8016910,,oracle/screenshots/GP-004.png,kucuk etki
+GP-005,a-priori,2,0.8,0.05,0.80,,3.0983867,2.1447867,14,15,0.8213105,,oracle/screenshots/GP-005.png,buyuk etki
+GP-006,a-priori,2,0.3,0.01,0.90,,3.9000000,2.6054101,168,169,0.9006992,,oracle/screenshots/GP-006.png,
+GP-007,a-priori,1,0.3,0.01,0.90,,3.6496575,2.3519825,147,148,0.9014052,,oracle/screenshots/GP-007.png,
+GP-008,a-priori,2,1.0,0.05,0.90,,3.6055513,2.1788128,12,13,0.9107085,,oracle/screenshots/GP-008.png,
+GP-009,a-priori,1,1.2,0.10,0.80,,2.6832816,1.5332063,4,5,0.8641587,,oracle/screenshots/GP-009.png,
+GP-010,a-priori,2,0.421637,0.05,0.832114,,2.9814238,2.0095752,49,50,0.8321145,,oracle/screenshots/GP-010.png,kilavuz baglantili
+GP-011,a-priori,1,0.625,0.05,0.95,,3.4232660,1.6991270,29,30,0.9551444,,oracle/screenshots/GP-011.png,kilavuz s.50 tek orneklem esdegeri (N=30 beklenir)
+GP-012,a-priori,2,0.1,0.01,0.90,,3.8626416,2.5791308,1491,1492,0.9001687,,oracle/screenshots/GP-012.png,kilavuz s.50 (N=1492 beklenir)
+GP-013,a-priori,2,0.35,0.05,0.85,,3.0512293,1.9921022,75,76,0.8535940,,oracle/screenshots/GP-013.png,
+GP-014,a-priori,1,0.45,0.025,0.90,,3.3068112,2.0057460,53,54,0.9008410,,oracle/screenshots/GP-014.png,
+GP-015,a-priori,2,0.65,0.10,0.99,,4.0592487,1.6859545,38,39,0.9903753,,oracle/screenshots/GP-015.png,yuksek guc
+GP-016,a-priori,2,0.01,0.05,0.80,,2.8016245,1.9599942,78490,78491,0.8000024,,oracle/screenshots/GP-016.png,sinir: dz cok kucuk
+GP-017,a-priori,2,5.0,0.05,0.95,,8.6602540,4.3026527,2,3,0.9754623,,oracle/screenshots/GP-017.png,sinir: dz cok buyuk
+GP-018,a-priori,1,5.0,0.05,0.80,,8.6602540,2.9199856,2,3,0.9992757,,oracle/screenshots/GP-018.png,sinir: dz cok buyuk tek kuyruk
+GP-019,a-priori,2,3.0,0.05,0.95,,6.0000000,3.1824463,3,4,0.9670006,,oracle/screenshots/GP-019.png,sinir: kucuk N
+GP-020,a-priori,2,0.5,0.05,0.05,,0.7071068,12.7062047,1,2,0.0619486,,oracle/screenshots/GP-020.png,sinir: guc = alfa
+GP-021,a-priori,2,0.5,0.05,0.03,,?,?,?,?,?,[Input error] Power must be greater than or equal to alpha.,oracle/screenshots/GP-021.png,sinir: guc < alfa
+GP-022,a-priori,1,0.5,0.05,0.05,,0.7071068,6.3137515,1,2,0.1058229,,oracle/screenshots/GP-022.png,sinir: guc = alfa tek kuyruk
+GP-023,a-priori,2,0.5,0.05,0.0500001,,0.7071068,12.7062047,1,2,0.0619486,,oracle/screenshots/GP-023.png,sinir: guc alfanin hemen ustu
+GP-024,a-priori,2,0.5,0.05,0.9999,,5.7227616,1.9783804,130,131,0.9999004,,oracle/screenshots/GP-024.png,sinir: guc ~1
+GP-025,a-priori,2,0,0.05,0.80,,?,?,?,?,?,"[Input error] In an a priori analysis, the absolute value of the effect size be greater than 0.00001.",oracle/screenshots/GP-025.png,gecersiz: dz = 0
+GP-026,a-priori,2,-0.5,0.05,0.80,,-2.9154759,-2.0345153,33,34,0.8077775,,oracle/screenshots/GP-026.png,sinir: negatif dz
+GP-027,a-priori,1,-0.5,0.05,0.80,,-2.5980762,-1.7056179,26,27,0.8118316,,oracle/screenshots/GP-027.png,sinir: negatif dz tek kuyruk
+GP-028,a-priori,2,0.5,0,0.80,,?,?,?,?,?,"[Input error] Alpha is outside the admissible range (1e-07, 1).",oracle/screenshots/GP-028.png,gecersiz: alfa = 0
+GP-029,a-priori,2,0.5,1,0.80,,?,?,?,?,?,"[Input error] Alpha is outside the admissible range (1e-07, 1).",oracle/screenshots/GP-029.png,gecersiz: alfa = 1 (uzun bekleme ile tekrar)
+GP-030,a-priori,2,0.5,0.05,1,,?,?,?,?,?,"[Input error] Power is outside the admissible range (1e-07, 1).",oracle/screenshots/GP-030.png,gecersiz: guc = 1 (uzun bekleme ile tekrar)
+GP-031,a-priori,2,0.5,0.05,0,,?,?,?,?,?,"[Input error] Power is outside the admissible range (1e-07, 1).",oracle/screenshots/GP-031.png,gecersiz: guc = 0
+GP-032,a-priori,2,abc,0.05,0.80,,?,?,?,?,?,"[Input error] In an a priori analysis, the absolute value of the effect size be greater than 0.00001.",oracle/screenshots/GP-032.png,gecersiz: sayi degil
+GP-033,a-priori,2,0.5,0.5,0.80,,1.5000000,0.7063866,8,9,0.8047610,,oracle/screenshots/GP-033.png,sinir: alfa buyuk
+GP-034,a-priori,2,0.5,0.05,0.6,,2.3452079,2.0796138,21,22,0.6091848,,oracle/screenshots/GP-034.png,
+GP-035,a-priori,1,0.2,0.05,0.95,,3.2984845,1.6504958,271,272,0.9500543,,oracle/screenshots/GP-035.png,
+GP-036,post-hoc,2,0.5,0.05,,30,2.7386128,2.0452296,29,,0.7539647,,oracle/screenshots/GP-036.png,tipik
+GP-037,post-hoc,1,0.5,0.05,,30,2.7386128,1.6991270,29,,0.8482542,,oracle/screenshots/GP-037.png,tipik tek kuyruk
+GP-038,post-hoc,2,0.421637,0.05,,50,2.9814238,2.0095752,49,,0.8321145,,oracle/screenshots/GP-038.png,kilavuz s.48
+GP-039,post-hoc,2,0.2828427,0.05,,50,1.9999999,2.0095752,49,,0.5003516,,oracle/screenshots/GP-039.png,kilavuz s.48 rho=0
+GP-040,post-hoc,2,0.3,0.01,,100,3.0000000,2.6264055,99,,0.6457393,,oracle/screenshots/GP-040.png,
+GP-041,post-hoc,2,0.5,0.05,,2,?,?,?,,?,"[Input error] Total sample size is outside the admissible range (3, 2147483646)",oracle/screenshots/GP-041.png,sinir: en kucuk N
+GP-042,post-hoc,2,0.5,0.05,,1,?,?,?,,?,"[Input error] Total sample size is outside the admissible range (3, 2147483646)",oracle/screenshots/GP-042.png,gecersiz: N = 1
+GP-043,post-hoc,2,0.5,0.05,,0,?,?,?,,?,"[Input error] Total sample size is outside the admissible range (3, 2147483646)",oracle/screenshots/GP-043.png,gecersiz: N = 0
+GP-044,post-hoc,2,0.5,0.05,,2.5,0.8660254,4.3026527,2,,0.0841071,,oracle/screenshots/GP-044.png,sinir: kesirli N
+GP-045,post-hoc,2,0,0.05,,30,0,2.0452296,29,,0.0500000,,oracle/screenshots/GP-045.png,sinir: dz = 0 (guc = alfa beklenir)
+GP-046,post-hoc,1,0,0.05,,30,0,1.6991270,29,,0.0500000,,oracle/screenshots/GP-046.png,sinir: dz = 0 tek kuyruk
+GP-047,post-hoc,2,-0.5,0.05,,30,-2.7386128,-2.0452296,29,,0.7539647,,oracle/screenshots/GP-047.png,sinir: negatif dz
+GP-048,post-hoc,1,-0.5,0.05,,30,-2.7386128,-1.6991270,29,,0.8482542,,oracle/screenshots/GP-048.png,sinir: negatif dz tek kuyruk
+GP-049,post-hoc,2,0.01,0.05,,100000,3.1622777,1.9599877,99999,,0.8853733,,oracle/screenshots/GP-049.png,sinir: buyuk N
+GP-050,post-hoc,2,5.0,0.05,,3,8.6602540,4.3026527,2,,0.9754623,,oracle/screenshots/GP-050.png,sinir: buyuk dz kucuk N
+GP-051,post-hoc,2,0.5,0,,30,?,?,?,,?,"[Input error] Alpha is outside the admissible range (1e-07, 1).",oracle/screenshots/GP-051.png,gecersiz: alfa = 0
+GP-052,post-hoc,2,0.5,1,,30,?,?,?,,?,"[Input error] Alpha is outside the admissible range (1e-07, 1).",oracle/screenshots/GP-052.png,gecersiz: alfa = 1
+GP-053,post-hoc,1,0.8,0.10,,15,3.0983867,1.3450304,14,,0.9575009,,oracle/screenshots/GP-053.png,
+GP-054,post-hoc,2,1.2,0.01,,12,4.1569219,3.1058065,11,,0.8260201,,oracle/screenshots/GP-054.png,
+GP-055,post-hoc,2,0.25,0.05,,128,2.8284271,1.9788195,127,,0.8015071,,oracle/screenshots/GP-055.png,
+GP-056,a-priori,2,0.001,0.05,0.80,,2.8015822,1.9599643,7848862,7848863,0.8000000,,oracle/screenshots/GP-056.png,sinir: N cok buyuk
+GP-057,a-priori,2,0.00002,0.05,0.80,,2.8015867,1.9599640,19622220503,19622220504,0.8000000,,oracle/screenshots/GP-057.png,sinir: N int sinirina yakin
+GP-058,a-priori,2,0.000011,0.05,0.80,,2.8015597,1.9599640,64865593766,64865593767,0.8000049,,oracle/screenshots/GP-058.png,sinir: dz esigin hemen ustu
+GP-059,a-priori,2,0.5,0.0000001,0.80,,6.4614240,5.5716539,166,167,0.8048331,,oracle/screenshots/GP-059.png,sinir: alfa alt sinir 1e-7
+GP-060,a-priori,2,0.5,0.0000002,0.80,,6.3245553,5.4375240,159,160,0.8042097,,oracle/screenshots/GP-060.png,sinir: alfa alt sinirin hemen ustu
+GP-061,a-priori,2,0.5,0.9999999,0.99,,?,?,?,?,?,[Input error] Power must be greater than or equal to alpha.,oracle/screenshots/GP-061.png,sinir: alfa ust sinira yakin
+GP-062,post-hoc,2,0.5,0.05,,3,0.8660254,4.3026527,2,,0.0841071,,oracle/screenshots/GP-062.png,sinir: post hoc en kucuk kabul edilen N
+GP-063,post-hoc,2,0.5,0.05,,2.4,?,?,?,,?,"[Input error] Total sample size is outside the admissible range (3, 2147483646)",oracle/screenshots/GP-063.png,sinir: kesirli N asagi
+GP-064,post-hoc,2,0.5,0.05,,3.5,1.0000000,3.1824463,3,,0.1112749,,oracle/screenshots/GP-064.png,sinir: kesirli N yarim
+GP-065,post-hoc,2,0.5,0.05,,4.5,1.1180340,2.7764451,4,,0.1405167,,oracle/screenshots/GP-065.png,sinir: kesirli N yarim (banker yuvarlama testi)
+GP-066,a-priori,2,0.5,0.05,0.95,,3.6742346,2.0057460,53,54,0.9502120,,oracle/screenshots/GP-066.png,ondalik ayrac kontrolu tekrar (GP-001)
+GP-067,post-hoc,2,20,0.05,,10,63.2455532,2.2621572,9,,1.0000000,,oracle/screenshots/GP-067.png,sinir: dz = 20 (ust sinir adayi)
+GP-068,post-hoc,2,20.5,0.05,,10,?,?,?,,?,"[Input error] Effect size d is outside the admissible range (-20, 20).",oracle/screenshots/GP-068.png,sinir: dz > 20
+GP-069,post-hoc,2,-20.5,0.05,,10,?,?,?,,?,"[Input error] Effect size d is outside the admissible range (-20, 20).",oracle/screenshots/GP-069.png,sinir: dz < -20
+GP-070,a-priori,2,25,0.05,0.80,,?,?,?,?,?,"[Input error] Effect size d is outside the admissible range (-20, 20).",oracle/screenshots/GP-070.png,sinir: a priori dz > 20
+GP-071,a-priori,2,0.00001,0.05,0.80,,2.8015758,1.9599640,78488272180,78488272181,0.8000265,,oracle/screenshots/GP-071.png,sinir: |dz| = 1e-5 tam esik
+GP-072,post-hoc,2,0.5,0.05,,3.4999,0.8660254,4.3026527,2,,0.0841071,,oracle/screenshots/GP-072.png,sinir: yuvarlama 3.4999

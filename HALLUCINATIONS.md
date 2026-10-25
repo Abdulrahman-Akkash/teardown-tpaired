@@ -1,0 +1,11 @@
+# Halüsinasyon Günlüğü
+
+Ajanın (Oturum 1, Claude Code) emin göründüğü ama yanlış çıkan çıkarımları.
+
+| ID | Ajanın iddiası | Gerçek davranış | Nasıl fark edildi | Yakalayan test / vektör |
+|---|---|---|---|---|
+| H-001 | "α = 1 ve güç = 1 girildiğinde G*Power hata vermiyor, sessizce hiçbir şey hesaplamıyor." (ilk toplama turunda GP-029, GP-030 boş geldi) | İkisi de hata kutusu açıyor ("Alpha/Power is outside the admissible range"). Kutu 0.8 sn'den geç açıldığı için toplayıcı onu kaçırmış. | Ekran görüntüsünde boş çıktı alanları vardı ama ikinci kez, 6 sn bekleme ile çalıştırınca hata kutusu yakalandı. Binary'de `FUN_00487460` / `FUN_00488010` aralık kontrolü (L-020, L-021) de hatayı öngörüyordu. | GP-029, GP-030 (yeniden toplama); `scripts/collect_gpower.py` artık `GPOWER_WAIT` alıyor |
+| H-002 | "Eşleştirilmiş t'nin etki büyüklüğü kontrolü 0x4dd090'da; çünkü `dz` etiketini orada kullanıyor." | 0x4dd090 iki Wilcoxon sınıfına ait. Asıl kontrol 0x4db990'da ve ek olarak −20 ≤ dz ≤ 20 sınırı koyuyor. | Vtable'larda ad yuvası karşılaştırıldı: 0x4dd090'ı kullanan sınıfların adı "Wilcoxon signed-rank test …" çıktı (L-003). | GP-067…GP-070 (dz = 20 kabul, 20.5 / −20.5 / 25 ret) |
+| H-003 | "Post hoc'ta N'nin alt sınırı 2; çünkü sınıfın vtable'ındaki N kontrolü (0x4d9310) `[2, 0x7ffffffe]` kullanıyor ve N'yi keserek tamsayıya çeviriyor." | Aktif yol 0x4dc2a0 içinde alt sınır **3**; N kesilmiyor, en yakın tamsayıya yuvarlanıyor (2.5 → 3 kabul). | GUI N = 2 için "(3, 2147483646)" hatası verdi. `push 0x7ffffffe; push 3` bayt araması 0x4dc2a0 içindeki dört çağrıyı buldu (L-011, L-014). | GP-041, GP-044, GP-063, GP-072 |
+| H-004 | "G*Power a priori N'yi doğrudan `ceil(N_kesirli)` ile yuvarlıyor; statsmodels'tan farkı yalnızca bu." (ilk oracle betiğinin yorumunda) | Önce 10 ondalık basamağa yuvarlanıyor, sonra ceil (0x496a20, L-032); ayrıca N < 2 ise 2'ye çekiliyor ve güç ≤ α'da statsmodels NaN verirken G*Power N = 2 veriyor. | REA ile 0x496aa0 (çözücü) ve 0x496a20 incelendi. | GP-020, GP-022 (N = 2); SM-0573…SM-0575 (statsmodels NaN) |
+| H-005 | "En güncel Ghidra (12.2) REA ile çalışır." | REA 6.8.0 Ghidra 12.1.x istiyor; ayrıca Node ≥ 24.22.1 gerekiyordu. | `rea setup --dry-run` raporu (doctor) iki uyumsuzluğu da gösterdi; 12.2 indirmesi iptal edildi. | Kurulum adımı (AGENT_COST.md) |
