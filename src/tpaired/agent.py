@@ -73,12 +73,15 @@ def claude_executable() -> str:
     return found
 
 
-def _mcp_config() -> str:
-    cfg = {"mcpServers": {"tpaired-power": {
-        "command": sys.executable,
-        "args": ["-m", "tpaired.mcp_server"],
-        "env": {"PYTHONPATH": str(ROOT / "src")},
-    }}}
+ENGINE_SERVERS = {"tpaired-power": {
+    "command": sys.executable,
+    "args": ["-m", "tpaired.mcp_server"],
+    "env": {"PYTHONPATH": str(ROOT / "src")},
+}}
+
+
+def _mcp_config(servers: dict) -> str:
+    cfg = {"mcpServers": servers}
     fd, path = tempfile.mkstemp(prefix="tpaired-mcp-", suffix=".json")
     with os.fdopen(fd, "w", encoding="utf-8") as f:
         json.dump(cfg, f)
@@ -98,18 +101,24 @@ def _parse_final_json(text: str) -> dict | None:
     return None
 
 
-def ask(question: str, model: str = DEFAULT_MODEL, log_path: Path | None = None) -> dict:
-    """Run one question through the agent. Returns the parsed decision plus run metrics."""
+def ask(question: str, model: str = DEFAULT_MODEL, log_path: Path | None = None, *,
+        system_prompt: str = SYSTEM_PROMPT, servers: dict = ENGINE_SERVERS,
+        allowed_tools: tuple[str, ...] = (TOOL,)) -> dict:
+    """Run one question through the agent. Returns the parsed decision plus run metrics.
+
+    The keyword arguments exist for the evaluation harness (eval/run_gui_eval.py), which
+    runs the same loop against the G*Power GUI instead of the engine.
+    """
     claude = claude_executable()
-    cfg = _mcp_config()
+    cfg = _mcp_config(servers)
     fd, prompt_file = tempfile.mkstemp(prefix="tpaired-sys-", suffix=".txt")
     with os.fdopen(fd, "w", encoding="utf-8") as f:
-        f.write(SYSTEM_PROMPT)
+        f.write(system_prompt)
     cmd = [claude, "-p", question,
            "--system-prompt-file", prompt_file,
            "--mcp-config", cfg, "--strict-mcp-config",
            "--tools", "",
-           "--allowedTools", TOOL,
+           "--allowedTools", ",".join(allowed_tools),
            "--model", model,
            "--output-format", "stream-json", "--verbose",
            "--no-session-persistence",
@@ -137,7 +146,7 @@ def ask(question: str, model: str = DEFAULT_MODEL, log_path: Path | None = None)
     for ev in events:
         if ev.get("type") == "assistant":
             for block in ev.get("message", {}).get("content", []):
-                if block.get("type") == "tool_use":
+                if isinstance(block, dict) and block.get("type") == "tool_use":
                     tool_calls.append({"name": block.get("name"), "input": block.get("input")})
     final = next((ev for ev in reversed(events) if ev.get("type") == "result"), {})
     decision = _parse_final_json(final.get("result", "")) or {}

@@ -170,24 +170,42 @@ gerçek doğruluk 1.0); 0.90–1.00 aralığında 18 koşu (ort. 0.962, doğrulu
 için set kalibrasyonu sınamaya yetmez. Model biraz *az güvenli* görünüyor (doğruluk 1.0 iken güven
 0.85–0.97), ama 20 koşu bunu söylemek için azdır.
 
-### MCP yolu ile GUI ekran görüntüsü yolu
+### MCP yolu ile GUI ekran görüntüsü yolu (ikisi de ölçüldü)
 
-| | MCP yolu (ölçüldü) | GUI ekran görüntüsü yolu |
-|---|---|---|
-| Token / soru | 4 267 (TR), 4 478 (EN); t-paired sorularında ~5 540 | Yalnızca görüntüler: **≥ 5 427** (tahmin) |
-| Doğruluk | 20/20 | Ölçülmedi |
-| Süre / soru | 7.1–7.7 sn | Ölçülmedi |
+Aynı 10 soru, aynı model (`claude-sonnet-5-5`), aynı etiket kümesi ve 0.75 eşiğiyle iki yoldan da
+çözüldü, Türkçe ve İngilizce:
 
-GUI sütunu bir **tahmindir**, uçtan uca ölçüm değildir. `python eval/measure_gui_tokens.py`, bir
-G*Power ekran görüntüsünün (`GP-001.png`) modele maliyetini ölçer. Aynı istem bir kez görüntüyle, bir
-kez aynı bilginin tek satırlık metniyle çalıştırılır; girdi token farkı **603 token/görüntü** çıktı
-(`eval/gui_tokens.json`). Bir a priori soru en az 9 eylem ister (pencereyi bul, aile, test, analiz
-tipi, kuyruk, dz, α, güç, Calculate + oku) ve her eylemden sonra bir ekran görüntüsü gerekir. Bu da
-yalnızca görüntüler için 9 × 603 = 5 427 token eder. Bu bir alt sınırdır: ajanın kendi istemi ve araç
-tanımları hariçtir, ve her turda önceki görüntüler bağlamda kalırsa toplam girdi
-603 × (1 + 2 + … + 9) ≈ 27 000 tokena çıkar. GUI yolunun doğruluğu ve süresi ölçülemedi, çünkü bu
-ortamda bilgisayar kullanımı (computer use) yoktu. MCP yolu ise tek araç çağrısıyla motorun kesin
-sayısını döndürür; ekrandan sayı okuma hatası riski taşımaz.
+- **MCP yolu** (`python eval/run_eval.py`): ajan motorun `t_paired_power` aracını çağırır.
+- **GUI yolu** (`python eval/run_gui_eval.py`): ajan gerçek G*Power 3.1.9.7 penceresini yalnızca
+  ekran görüntüsüyle görür (`eval/gpower_gui_mcp.py`). Açılır listeleri seçer, alanlara yazar,
+  Calculate'e basar ve N'yi/gücü **görüntüden okur**. Hiçbir araç sonucu metin olarak döndürmez.
+  Her sorudan önce G*Power nötr bir duruma alınır (t tests, listedeki ilk test, a priori). Tam tablo
+  [eval/GUI_RESULTS.md](eval/GUI_RESULTS.md); kayıtlar `eval/logs/gui-<dil>-<id>.jsonl`.
+
+Hesap gerektiren 5 t-paired soruda, soru başına ortalama (TR ve EN birlikte, 10 koşu):
+
+| | MCP yolu | GUI yolu | Oran |
+|---|---|---|---|
+| Doğruluk (uçtan uca) | 10/10 | 10/10 | — |
+| Token / soru (girdi, önbellek dahil + çıktı) | 5 539 | 33 843 | ≈ 6.1× |
+| Maliyet / soru (CLI'nin raporladığı) | $0.0146 | $0.0474 | ≈ 3.2× |
+| Süre / soru | 7.6 sn | 17.3 sn | ≈ 2.3× |
+| Araç çağrısı / soru | 1 | 10.4 (3.1'i ekran görüntüsü) | — |
+
+Tüm set (20 koşu): ikisi de 20/20. Diğer 5 soruda iki yol da aracı hiç çağırmadığı için maliyetleri
+benzerdir. GUI yolunda soru başına ortalama ~18 500 token, MCP yolunda ~4 370 token.
+
+Notlar:
+- Maliyet oranı token oranından küçük, çünkü GUI koşularındaki girdinin çoğu önbellekten okunuyor
+  (her turda önceki görüntüler yeniden gönderiliyor ama önbellekten ucuza okunuyor).
+- GUI yolu burada **olduğundan ucuz** ölçüldü. Ajan kontrolü piksel koordinatıyla aramıyor, adıyla
+  seçiyor. Eşleşmeyen bir seçenekte liste metin olarak geliyor. Gerçek bir bilgisayar kullanımı
+  (computer use) ajanı daha fazla ekran görüntüsü ve tur harcar; bu sayılar GUI yolu için bir alt
+  sınırdır.
+- Tek bir G*Power ekran görüntüsünün maliyeti ayrıca ölçüldü: **603 token/görüntü**
+  (`python eval/measure_gui_tokens.py`, `eval/gui_tokens.json`).
+- Bu küçük sette GUI yolu da hiç okuma hatası yapmadı. Ama MCP yolu motorun kesin sayısını
+  döndürüyor; GUI yolunda doğruluk modelin ekrandan doğru okumasına bağlı.
 
 ## Repo yapısı
 
@@ -202,7 +220,7 @@ sayısını döndürür; ekrandan sayı okuma hatası riski taşımaz.
 | `src/tpaired/` | `engine.py` (tek hesap motoru), `output.py`, `cli.py`, `mcp_server.py` — Oturum 2 yazar |
 | `tests/` | SPEC senaryo testleri, diferansiyel testler, `REPORT.md` uyum raporu |
 | `src/tpaired/agent.py` | AI ajanı (yalnızca MCP aracını çağırır, hesap yapmaz) |
-| `eval/` | 10 soruluk değerlendirme seti, sonuçlar (`RESULTS.md`), araç çağrı kayıtları (`logs/`) |
+| `eval/` | 10 soruluk değerlendirme seti; MCP yolu (`RESULTS.md`) ve GUI yolu (`GUI_RESULTS.md`, `gpower_gui_mcp.py`) sonuçları; araç çağrı kayıtları (`logs/`) |
 | `docs/` | Demo videosu, REA kontrol görüntüsü, CLI sözleşmesi notları |
 | `scripts/` | Ortam kontrolü, GUI kâhin toplayıcı (`collect_gpower.py`), statsmodels kâhini, demo ve REA görüntüsü üreticileri |
 
