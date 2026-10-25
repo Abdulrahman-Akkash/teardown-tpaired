@@ -1,0 +1,34 @@
+{
+ "model": "claude-sonnet-5-5",
+ "screenshot": "oracle/screenshots/GP-001.png",
+ "with_image": {
+  "input_tokens_total": 128274,
+  "output_tokens": 119,
+  "cost_usd": 0.7475849999999999,
+  "duration_s": 6.395,
+  "result": "```json\n{\"Total sample size\": 54, \"Actual power\": 0.9502120}\n```",
+  "is_error": false
+ },
+ "text_only": {
+  "input_tokens_total": 127671,
+  "output_tokens": 119,
+  "cost_usd": 0.10665,
+  "duration_s": 5.827,
+  "result": "```json\n{\"Total sample size\": 54, \"Actual power\": 0.9502120}\n```",
+  "is_error": false
+ },
+ "tokens_per_screenshot": 603,
+ "screenshots_per_question": 9,
+ "steps": [
+  "initial screenshot (find the window)",
+  "select test family 't tests'",
+  "select statistical test 'matched pairs'",
+  "select type of power analysis",
+  "select tails",
+  "type effect size dz",
+  "type alpha",
+  "type power",
+  "click Calculate and read the output"
+ ],
+ "gui_estimate_tokens_per_question": 5427
+}

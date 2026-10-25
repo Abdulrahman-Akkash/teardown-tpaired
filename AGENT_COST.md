@@ -4,6 +4,7 @@
 |---|---|---|---|---|---|
 | 0+1 — kurulum, kâhin, inceleme | Claude Code (Claude Opus 5.5), Claude desktop uygulaması | ~295 bin token bağlam (oturum sonunda %74; %55'i mesajlar) | 5 saatlik limitin %17'si, haftalığın %18'i (abonelik planı; API faturası yok) | ~75 araç çağrısı; REA/Ghidra'ya ~40 sorgu | Ölçüm: uygulamanın `get_usage` aracı, 2026-10-25 |
 | 2 — yazım | Ayrı Claude Code oturumu (yalnızca SPEC.md), Claude Opus 5.5 | ~168k bağlam tokenı (oturum sonu) | Abonelik planı; ayrı ücret ölçülmedi | 6 pytest koşusu; 1 düzeltme turu (statsmodels güç≈1 sapması → mpmath hakem) | Temiz oda: LEDGER/HALLUCINATIONS/scripts/tools okunmadı |
+| 3 — AI ajanı ve değerlendirme | Ajan: headless Claude Code, `claude-sonnet-5-5`; geliştirme: Claude Code (Claude Opus 5.5) | Ajan koşusu başına ~4.3–4.5 bin token (önbellek dahil) | Değerlendirme 20 koşu: $0.27 (TR $0.130 + EN $0.141; CLI'nin raporladığı API eşdeğeri). Ekran görüntüsü ölçümü 2 koşu: $0.85 | 3 başarısız ajan sürümü (H-006, H-007), 1 tam değerlendirme koşusu (20/20) | Ayrıntı: `eval/RESULTS.md`, `eval/gui_tokens.json` |
 
 ## Süreç
 

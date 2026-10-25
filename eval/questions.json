@@ -1,0 +1,79 @@
+[
+  {
+    "id": "Q01",
+    "tr": "Yeni bir antihipertansif ilacın etkisini aynı hastalarda tedavi öncesi ve sonrası sistolik tansiyon ölçerek test edeceğiz. Orta düzeyde bir etki (dz = 0.5) bekliyoruz. Alfa 0.05, güç 0.95, iki yönlü. Kaç hasta gerekir?",
+    "en": "We will test a new antihypertensive drug by measuring systolic blood pressure in the same patients before and after treatment. We expect a medium effect (dz = 0.5). Alpha 0.05, power 0.95, two-sided. How many patients do we need?",
+    "label": "t-paired",
+    "params": {"mode": "a-priori", "tails": 2, "dz": 0.5, "alpha": 0.05, "power": 0.95},
+    "n_total": 54
+  },
+  {
+    "id": "Q02",
+    "tr": "Fizik tedavi programının ağrı skorunu yalnızca düşüreceğini öngörüyoruz, bu yüzden tek yönlü test yapacağız. Aynı hastaları program öncesi ve sonrası ölçeceğiz. Etki büyüklüğü dz 0.5, alfa 0.05, güç %80. Kaç hastaya ihtiyacımız var?",
+    "en": "We predict the physiotherapy programme will only lower pain scores, so we will use a one-sided test. We will measure the same patients before and after the programme. Effect size dz 0.5, alpha 0.05, power 80%. How many patients do we need?",
+    "label": "t-paired",
+    "params": {"mode": "a-priori", "tails": 1, "dz": 0.5, "alpha": 0.05, "power": 0.80},
+    "n_total": 27
+  },
+  {
+    "id": "Q03",
+    "tr": "30 hastada statin tedavisi öncesi ve sonrası LDL kolesterol ölçtük. Etki büyüklüğü dz = 0.4 idi, alfa 0.05 ve iki yönlü test kullandık. Bu çalışmanın istatistiksel gücü neydi?",
+    "en": "We measured LDL cholesterol in 30 patients before and after statin treatment. The effect size was dz = 0.4, with alpha 0.05 and a two-sided test. What was the statistical power of this study?",
+    "label": "t-paired",
+    "params": {"mode": "post-hoc", "tails": 2, "dz": 0.4, "alpha": 0.05, "n": 30},
+    "n_total": 30,
+    "power": 0.5628
+  },
+  {
+    "id": "Q04",
+    "tr": "Tek yumurta ikizlerinde, her çiftte bir ikize A diyeti diğerine B diyeti verilecek ve kilo kaybı karşılaştırılacak. Küçük bir etki (dz = 0.2) bekliyoruz. Alfa 0.01, güç 0.90, çift yönlü. Kaç ikiz çifti almalıyız?",
+    "en": "In identical twins, one twin in each pair will get diet A and the other diet B, and weight loss will be compared. We expect a small effect (dz = 0.2). Alpha 0.01, power 0.90, two-sided. How many twin pairs should we enrol?",
+    "label": "t-paired",
+    "params": {"mode": "a-priori", "tails": 2, "dz": 0.2, "alpha": 0.01, "power": 0.90},
+    "n_total": 376
+  },
+  {
+    "id": "Q05",
+    "tr": "Migren hastalarında yeni bir profilaktik tedavinin aylık atak sayısını aynı hastalarda tedavi öncesi ve sonrası karşılaştıracağız. Büyük bir etki bekliyoruz. Gücün %90 olmasını istiyoruz. Kaç hasta yeter?",
+    "en": "In migraine patients we will compare monthly attack counts before and after a new preventive treatment in the same patients. We expect a large effect. We want 90% power. How many patients are enough?",
+    "label": "t-paired",
+    "params": {"mode": "a-priori", "tails": 2, "dz": 0.8, "alpha": 0.05, "power": 0.90},
+    "n_total": 19
+  },
+  {
+    "id": "Q06",
+    "tr": "Aynı hastalarda diyaliz öncesi ve sonrası potasyum düzeyini ölçeceğiz. Ortalama farkın 0.5 mmol/L, farkların standart sapmasının 1.2 mmol/L olmasını bekliyoruz. Alfa 0.05, güç 0.80. Kaç hasta gerekir?",
+    "en": "We will measure potassium levels in the same patients before and after dialysis. We expect a mean difference of 0.5 mmol/L with a standard deviation of the differences of 1.2 mmol/L. Alpha 0.05, power 0.80. How many patients are needed?",
+    "label": "ambiguous",
+    "params": null,
+    "note": "Tasarım eşleştirilmiş ama dz verilmemiş; dz'yi ham değerlerden hesaplamak ajanın işi değil (ajan hesap yapmaz). Beklenen: araç çağrılmaz, dz istenir."
+  },
+  {
+    "id": "Q07",
+    "tr": "Yeni bir ilacı plaseboyla karşılaştıracağız; hastalar rastgele iki ayrı gruba ayrılacak. Etki büyüklüğü d = 0.5, alfa 0.05, güç 0.80. Grup başına kaç hasta gerekir?",
+    "en": "We will compare a new drug with placebo; patients will be randomised into two separate groups. Effect size d = 0.5, alpha 0.05, power 0.80. How many patients per group?",
+    "label": "t2-indep",
+    "params": null
+  },
+  {
+    "id": "Q08",
+    "tr": "Üç farklı tedavi kolunda (A, B, C ilaçları) HbA1c düşüşünü karşılaştıracağız, her hasta yalnızca bir kolda. Etki büyüklüğü f = 0.25, alfa 0.05, güç 0.80. Toplam kaç hasta gerekir?",
+    "en": "We will compare HbA1c reduction across three treatment arms (drugs A, B, C); each patient is in only one arm. Effect size f = 0.25, alpha 0.05, power 0.80. How many patients in total?",
+    "label": "anova-oneway",
+    "params": null
+  },
+  {
+    "id": "Q09",
+    "tr": "İki aşı tipinde yanıt veren ve vermeyen hasta oranlarını 2x2 tabloyla karşılaştıracağız. Etki büyüklüğü w = 0.3, alfa 0.05, güç 0.80. Kaç kişi gerekir?",
+    "en": "We will compare the proportions of responders and non-responders for two vaccine types using a 2x2 table. Effect size w = 0.3, alpha 0.05, power 0.80. How many people are needed?",
+    "label": "chi2-contingency",
+    "params": null
+  },
+  {
+    "id": "Q10",
+    "tr": "Yaş, VKİ, sigara ve tansiyonun koroner kalsiyum skorunu birlikte ne kadar açıkladığını çoklu regresyonla inceleyeceğiz. R² = 0.10 bekliyoruz, 4 yordayıcı, alfa 0.05, güç 0.80. Kaç hasta gerekir?",
+    "en": "We will use multiple regression to examine how much age, BMI, smoking and blood pressure jointly explain the coronary calcium score. We expect R² = 0.10, 4 predictors, alpha 0.05, power 0.80. How many patients are needed?",
+    "label": "multireg-r2",
+    "params": null
+  }
+]

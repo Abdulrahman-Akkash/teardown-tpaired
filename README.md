@@ -1,6 +1,6 @@
 # YZM301 Teardown Sprint — t testi, eşleştirilmiş ortalama (t-paired)
 
-> **Yapılan katmanlar:** ☑ CLI (temel) · ☑ MCP sunucusu (+15) · ☐ AI ajanı (+10)
+> **Yapılan katmanlar:** ☑ CLI (temel) · ☑ MCP sunucusu (+15) · ☑ AI ajanı (+10)
 
 Bu repo, bir güç analizi aracının **eşleştirilmiş t testi** (örnek senaryo: aynı hastada
 tedavi öncesi ve sonrası tansiyon) hesabının tersine mühendislikle incelenmesini, kanıt
@@ -36,7 +36,10 @@ G*Power yalnızca resmi sayfasından dağıtılır: https://www.psychologie.hhu.
 
 Ajana sorulan soru: *"REA araçları ve Ghidra sağlayıcısı bu oturumda kullanılabilir mi?"*
 
-![REA/Ghidra kontrolü](docs/rea-check.png) <!-- TODO: ekran görüntüsünü docs/ altına koyun -->
+![REA/Ghidra kontrolü](docs/rea-check.png)
+
+`scripts/rea_check_shot.py` ayrı bir konsol açıp `rea doctor` (Ghidra satırları) ve REA MCP'li
+`claude -p` ile bu soruyu çalıştırır; görüntü yalnızca o pencereden alınır.
 
 ## Kurulum
 
@@ -119,6 +122,73 @@ Girdi şeması:
 - post hoc: `{"n_total", "power", "critical", "df", "ncp"}`
 - geçersiz girdi: `{"error": "..."}`
 
+## AI ajanı (+10)
+
+Klinisyenin Türkçe (ya da İngilizce) sorusunu alır, test ailesini seçer, parametreleri çıkarır ve
+**yalnızca** `t_paired_power` MCP aracını çağırır. N, güç, kritik t, df ve ncp hep motordan gelir;
+ajan hiçbir sayı hesaplamaz.
+
+```bash
+python -m tpaired.agent "Aynı hastalarda tedavi öncesi ve sonrası tansiyon ölçeceğiz, dz = 0.5, alfa 0.05, güç 0.95, iki yönlü. Kaç hasta gerekir?"
+python -m tpaired.agent --json --log run.jsonl "..."   # tam sonuç + araç çağrı kaydı
+```
+
+- Ajan headless Claude Code'dur (`claude -p`, model `claude-sonnet-5-5`). `--strict-mcp-config` ve
+  `--tools ""` ile tek görünen araç `mcp__tpaired-power__t_paired_power`'dır; yerleşik araçlar
+  (Bash, Read, …) kapalıdır, yani ajan hesap yapmak için kod da çalıştıramaz. Claude Code'a
+  `claude /login` ile giriş yapılmış olmalıdır.
+- **Etiket kümesi:** `t2-indep`, `t-paired`, `anova-oneway`, `chi2-contingency`, `multireg-r2`,
+  `ambiguous`, `unsupported`. **Güven eşiği 0.75:** araç yalnızca etiket `t-paired` ve güven ≥ 0.75
+  ise çağrılır. Aksi hâlde karar araştırmacıya bırakılır (eksik parametre ya da desteklenmeyen tasarım
+  kısa bir Türkçe soruyla belirtilir).
+- **Jev yok:** Ödevde önerilen Jev sınıflandırıcısı kullanılmadı. Sınıflandırma, sistem istemiyle
+  yalnızca bu etiket kümesine kısıtlanmış bir LLM ile yapılır (`src/tpaired/agent.py`, `SYSTEM_PROMPT`).
+- dz soruda sayı ya da Cohen etiketi (küçük 0.2, orta 0.5, büyük 0.8) olarak verilmelidir. Ham
+  ortalama farkı ve SD verilirse ajan dz'yi kendisi hesaplamaz, `ambiguous` der ve dz'yi ister (Q06).
+
+### Değerlendirme
+
+`python eval/run_eval.py`: 10 soru (`eval/questions.json`; 5 t-paired, 1 belirsiz, 4 başka aile),
+Türkçe ve İngilizce. Her soru için beklenen aile, parametreler ve N (ya da güç) tanımlıdır. Tam tablo
+[eval/RESULTS.md](eval/RESULTS.md); her koşunun araç çağrı kaydı `eval/logs/<dil>-<id>.jsonl`.
+
+| Dil | Doğru seçim (uçtan uca) | Etiket | Ort. token / soru | Ort. maliyet / soru | Ort. süre / soru |
+|---|---|---|---|---|---|
+| Türkçe | **10/10** | 10/10 | 4 267 | $0.0130 | 7.1 sn |
+| İngilizce | **10/10** | 10/10 | 4 478 | $0.0141 | 7.7 sn |
+
+"Doğru" = etiket doğru VE t-paired sorularında araç beklenen parametrelerle çağrıldı ve motorun N/gücü
+beklenen değerle geldi; diğer sorularda araç hiç çağrılmadı. Token sayısı önbellekten okunanlar dahil
+toplam girdi + çıktıdır; maliyet ve süre Claude Code'un raporladığı değerlerdir.
+
+**TR ve EN karşılaştırması:** Doğrulukta fark yok (10/10 ve 10/10, aynı araç girdileri). İngilizce
+koşular ortalama %5 daha fazla token kullandı. Bu fark büyük ölçüde Q09'daki tek koşudan geliyor:
+model orada iki tur yaptı (4 641 + 1 043 token).
+
+**Kalibrasyon** (20 koşu): güven 0.75–0.90 aralığında 2 koşu (ikisi de Q06 `ambiguous`, ort. 0.85,
+gerçek doğruluk 1.0); 0.90–1.00 aralığında 18 koşu (ort. 0.962, doğruluk 1.0). Hiç hata olmadığı
+için set kalibrasyonu sınamaya yetmez. Model biraz *az güvenli* görünüyor (doğruluk 1.0 iken güven
+0.85–0.97), ama 20 koşu bunu söylemek için azdır.
+
+### MCP yolu ile GUI ekran görüntüsü yolu
+
+| | MCP yolu (ölçüldü) | GUI ekran görüntüsü yolu |
+|---|---|---|
+| Token / soru | 4 267 (TR), 4 478 (EN); t-paired sorularında ~5 540 | Yalnızca görüntüler: **≥ 5 427** (tahmin) |
+| Doğruluk | 20/20 | Ölçülmedi |
+| Süre / soru | 7.1–7.7 sn | Ölçülmedi |
+
+GUI sütunu bir **tahmindir**, uçtan uca ölçüm değildir. `python eval/measure_gui_tokens.py`, bir
+G*Power ekran görüntüsünün (`GP-001.png`) modele maliyetini ölçer. Aynı istem bir kez görüntüyle, bir
+kez aynı bilginin tek satırlık metniyle çalıştırılır; girdi token farkı **603 token/görüntü** çıktı
+(`eval/gui_tokens.json`). Bir a priori soru en az 9 eylem ister (pencereyi bul, aile, test, analiz
+tipi, kuyruk, dz, α, güç, Calculate + oku) ve her eylemden sonra bir ekran görüntüsü gerekir. Bu da
+yalnızca görüntüler için 9 × 603 = 5 427 token eder. Bu bir alt sınırdır: ajanın kendi istemi ve araç
+tanımları hariçtir, ve her turda önceki görüntüler bağlamda kalırsa toplam girdi
+603 × (1 + 2 + … + 9) ≈ 27 000 tokena çıkar. GUI yolunun doğruluğu ve süresi ölçülemedi, çünkü bu
+ortamda bilgisayar kullanımı (computer use) yoktu. MCP yolu ise tek araç çağrısıyla motorun kesin
+sayısını döndürür; ekrandan sayı okuma hatası riski taşımaz.
+
 ## Repo yapısı
 
 | Yol | İçerik |
@@ -131,7 +201,10 @@ Girdi şeması:
 | `oracle/` | G*Power vektörleri (CSV) + ekran görüntüleri, statsmodels ölçek vektörleri |
 | `src/tpaired/` | `engine.py` (tek hesap motoru), `output.py`, `cli.py`, `mcp_server.py` — Oturum 2 yazar |
 | `tests/` | SPEC senaryo testleri, diferansiyel testler, `REPORT.md` uyum raporu |
-| `scripts/` | Ortam kontrolü, GUI kâhin toplayıcı (`collect_gpower.py`), statsmodels kâhini |
+| `src/tpaired/agent.py` | AI ajanı (yalnızca MCP aracını çağırır, hesap yapmaz) |
+| `eval/` | 10 soruluk değerlendirme seti, sonuçlar (`RESULTS.md`), araç çağrı kayıtları (`logs/`) |
+| `docs/` | Demo videosu, REA kontrol görüntüsü, CLI sözleşmesi notları |
+| `scripts/` | Ortam kontrolü, GUI kâhin toplayıcı (`collect_gpower.py`), statsmodels kâhini, demo ve REA görüntüsü üreticileri |
 
 ## Kâhin
 
@@ -142,4 +215,5 @@ Girdi şeması:
 
 ## Demo
 
-60 saniyelik CLI videosu: `TODO — link`
+56 saniyelik CLI videosu: [docs/demo.mp4](docs/demo.mp4). `scripts/make_demo.py` komutları gerçekten
+çalıştırır ve gerçek çıktılarını terminal kaydı olarak çizer.
